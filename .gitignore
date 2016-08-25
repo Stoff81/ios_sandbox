@@ -1,0 +1,6 @@
+Pods/
+fastlane/README.md
+fastlane/output/
+fastlane/report.xml
+
+xcuserdata/
