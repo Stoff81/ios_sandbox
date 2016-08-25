@@ -31,6 +31,27 @@ platform :ios do
       output_types: "json-compilation-database",
       use_clang_report_name: true
     )
+    oclint(
+      compile_commands: Dir.pwd + "/output/scan/compile_commands.json",    # The JSON compilation database, use xctool reporter 'json-compilation-database'
+      select_regex: //,     # Select all files matching this regex
+      exclude_regex: /.dummy.m|.Tests.m/,              # Exclude all files matching this regex
+      max_priority_1: 1000,                 # The max allowed number of priority 1 violations
+      max_priority_2: 10000,                # The max allowed number of priority 2 violations
+      max_priority_3: 100000,               # The max allowed number of priority 3 violations
+      thresholds: [                         # Override the default behavior of rules
+        'LONG_LINE=200',
+        'LONG_METHOD=200'
+      ],
+      enable_rules: [                       # List of rules to pick explicitly
+        
+      ],
+      #disable_rules: ["GotoStatement"],     # List of rules to disable
+      list_enabled_rules: true,             # List enabled rules
+      enable_clang_static_analyzer: true,   # Enable Clang Static Analyzer, and integrate results into OCLint report
+      enable_global_analysis: true,         # Compile every source, and analyze across global contexts (depends on number of source files, could results in high memory load)
+      allow_duplicated_violations: true,    # Allow duplicated violations in the OCLint report
+      report_path: "fastlane/output/scan/oclint_report.html"
+    )
   end
   
   after_all do |lane|
